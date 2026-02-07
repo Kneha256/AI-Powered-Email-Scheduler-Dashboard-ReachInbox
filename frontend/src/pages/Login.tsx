@@ -1,9 +1,17 @@
 import React from 'react';
 import { FcGoogle } from 'react-icons/fc';
+import { authAPI } from '../services/api';   // IMPORTANT
 
 const Login: React.FC = () => {
-  const handleGoogleLogin = () => {
-    window.location.href = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/auth/google`;
+
+  const handleLogin = async () => {
+    try {
+      await authAPI.login();      // temporary demo login
+      window.location.href = "/dashboard";
+    } catch (error) {
+      console.error("Login failed:", error);
+      alert("Login failed. Try again.");
+    }
   };
 
   return (
@@ -16,15 +24,17 @@ const Login: React.FC = () => {
 
         <div className="mb-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-2">Welcome!</h2>
-          <p className="text-gray-600">Sign in to schedule and manage your email campaigns</p>
+          <p className="text-gray-600">
+            Sign in to schedule and manage your email campaigns
+          </p>
         </div>
 
         <button
-          onClick={handleGoogleLogin}
+          onClick={handleLogin}
           className="w-full flex items-center justify-center space-x-3 bg-white border-2 border-gray-300 rounded-lg px-6 py-3 text-gray-700 font-medium hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 shadow-sm"
         >
           <FcGoogle size={24} />
-          <span>Continue with Google</span>
+          <span>Continue</span>
         </button>
 
         <div className="mt-8 text-center text-sm text-gray-500">
