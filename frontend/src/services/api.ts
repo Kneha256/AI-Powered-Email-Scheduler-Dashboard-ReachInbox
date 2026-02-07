@@ -1,14 +1,16 @@
 import axios from 'axios';
 import { ScheduleEmailPayload, EmailJob, User } from '../types';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL ||
+  'https://ai-powered-email-scheduler-dashboard.onrender.com';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 });
 
 export const authAPI = {
@@ -19,7 +21,12 @@ export const authAPI = {
 
   logout: async () => {
     await api.post('/auth/logout');
-  }
+  },
+
+  login: async () => {
+    const response = await api.post('/auth/login');
+    return response.data.user;
+  },
 };
 
 export const emailAPI = {
@@ -31,8 +38,8 @@ export const emailAPI = {
   scheduleEmailsWithFile: async (formData: FormData) => {
     const response = await api.post('/api/emails/schedule', formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     });
     return response.data;
   },
@@ -50,13 +57,15 @@ export const emailAPI = {
   parseCSV: async (file: File) => {
     const formData = new FormData();
     formData.append('file', file);
+
     const response = await api.post('/api/emails/parse-csv', formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     });
+
     return response.data;
-  }
+  },
 };
 
 export default api;
