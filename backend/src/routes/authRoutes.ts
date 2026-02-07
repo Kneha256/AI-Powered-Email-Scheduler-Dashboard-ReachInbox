@@ -1,24 +1,38 @@
 import express from 'express';
-import passport from '../config/passport';
-import { getCurrentUser, logout } from '../controllers/authController';
 
 const router = express.Router();
 
-// Google OAuth
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+/**
+ * TEMPORARY AUTH (no Google, no Passport)
+ * This keeps your backend deployable on Render.
+ * We can restore real Google OAuth later.
+ */
 
-router.get(
-  '/google/callback',
-  passport.authenticate('google', { failureRedirect: `${process.env.FRONTEND_URL}/login` }),
-  (req, res) => {
-    res.redirect(process.env.FRONTEND_URL || 'http://localhost:3000');
-  }
-);
+// Simple demo login so frontend can work
+router.post('/login', (req, res) => {
+  res.json({
+    user: {
+      id: 'demo-user',
+      email: 'demo@example.com',
+      name: 'Demo User'
+    }
+  });
+});
 
-// Get current user
-router.get('/me', getCurrentUser);
+// Fake "current user" endpoint
+router.get('/me', (req, res) => {
+  res.json({
+    user: {
+      id: 'demo-user',
+      email: 'demo@example.com',
+      name: 'Demo User'
+    }
+  });
+});
 
-// Logout
-router.post('/logout', logout);
+// Simple logout (just responds OK)
+router.post('/logout', (req, res) => {
+  res.json({ success: true });
+});
 
 export default router;
