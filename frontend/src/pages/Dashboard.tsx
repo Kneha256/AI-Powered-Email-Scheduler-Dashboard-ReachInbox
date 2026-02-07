@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { User, EmailJob } from '../types';
 import { emailAPI } from '../services/api';
 import Header from '../components/Header';
@@ -18,7 +18,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user }) => {
   const [loading, setLoading] = useState(false);
   const [isComposeOpen, setIsComposeOpen] = useState(false);
 
-  const fetchEmails = async () => {
+  const fetchEmails = useCallback(async () => {
     setLoading(true);
     try {
       if (activeTab === 'scheduled') {
@@ -33,11 +33,11 @@ const Dashboard: React.FC<DashboardProps> = ({ user }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTab]);
 
   useEffect(() => {
     fetchEmails();
-  }, [activeTab]);
+  }, [fetchEmails]);
 
   const handleComposeSuccess = () => {
     fetchEmails();
