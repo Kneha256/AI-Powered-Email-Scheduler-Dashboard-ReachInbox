@@ -52,8 +52,9 @@ app.get('/health', (req, res) => {
 // Start server
 async function startServer() {
   try {
-    await initDatabase();
-    
+    // ❌ DISABLED DATABASE FOR RENDER DEPLOY
+    // await initDatabase();
+
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
