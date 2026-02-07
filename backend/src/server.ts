@@ -2,7 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
 import dotenv from 'dotenv';
-import passport from './config/passport';
+// ❌ DISABLED: Google Passport for now
+// import passport from './config/passport';
+
 import { initDatabase } from './config/database';
 import authRoutes from './routes/authRoutes';
 import emailRoutes from './routes/emailRoutes';
@@ -21,7 +23,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Session
+// Session (keep this — it’s fine)
 app.use(
   session({
     secret: process.env.SESSION_SECRET || 'your-secret-key',
@@ -34,15 +36,15 @@ app.use(
   })
 );
 
-// Passport
-app.use(passport.initialize());
-app.use(passport.session());
+// ❌ DISABLED: Passport (prevents Google errors)
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // Routes
 app.use('/auth', authRoutes);
 app.use('/api/emails', emailRoutes);
 
-// Health check
+// Health check (very useful on Render)
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
